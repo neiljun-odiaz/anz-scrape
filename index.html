@@ -17,7 +17,7 @@
 
 	<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
 	<link rel="stylesheet" href="styles.css">
-	<title>Practice XML</title>
+	<title>ANZ Business Ready</title>
 </head>
 <body>
    
@@ -26,7 +26,8 @@
 		<div class="app-wrapper">
 			<div class="title text-center">A New Business Just Started In</div>
 			<div class="location-wrapper text-center">
-				<span class="location text-center">{{ displayPlace }}, {{ displayCode }}</span>
+				<span class="location text-center hor" v-if="charLength <= 16">{{ displayPlace }}, {{ displayCode }}</span>
+				<span class="location text-center ver" v-if="charLength > 16">{{ displayPlace }}, {{ displayCode }}</span>
 			</div>
 			<div class="elapsed-time text-center"><span class="clock-icon"></span> {{ displayDate | moment }}</div>
 			<div class="tag-line text-center">One Day Business Set-up Online</div>
@@ -57,11 +58,14 @@
 				displayPlace: '',
 				displayCode: '',
 				displayDate: '',
+				displayTime: '',
 				placeName: [],
 				adminCode: [],
 				pubDate: [],
+				elapsdTime: [],
 				currentIndex: 0,
 				windowWidth: 0,
+				charLength: 0,
 			},
 
 			mounted() {
@@ -75,19 +79,22 @@
 				changeLocation: function() {
 					let vm = this
 					setInterval(function(){
-						if (vm.currentIndex == vm.placeName.length || vm.currentIndex == 3 ) {
+						if (vm.currentIndex == vm.placeName.length ) {
 							vm.currentIndex = 0
 						}
 						vm.displayPlace = vm.placeName[vm.currentIndex]
+						// vm.displayPlace = "Weird Places Around the World"
 						vm.displayDate = vm.pubDate[vm.currentIndex]
 						vm.displayCode = vm.adminCode[vm.currentIndex]
 						vm.currentIndex++
+						vm.charLength = vm.displayPlace.length
 						
-					}, 60000);
-
+						
+					}, 20000);
 					setInterval(function(){
 						vm.rotateBox()
-					}, 60000);
+						vm.checkLocations()
+					}, 20000);
 				},
 
 				getLocations: function() {
@@ -103,64 +110,80 @@
 			           			var placeArray = new Array();
 								var pubDateArray = new Array();
 								var codeArray = new Array();
+								var timeArray = new Array();
 			             		$(data).find('item').each(function () {
 				               		var el = $(this);
 					               	self.title = el.find('placeName').text()
 					               	placeArray.push(el.find('placeName').text() );
 					               	codeArray.push(el.find('adminCode1').text() );
 					               	pubDateArray.push(el.find('pubDate').text() );
+					               	timeArray.push(el.find('timeElapsed').text() );
 			             		});
-
 	         		      		localStorage.setItem('placeName', JSON.stringify(placeArray));
 	         		      		localStorage.setItem('adminCode', JSON.stringify(codeArray));
 					           	localStorage.setItem('pubDate', JSON.stringify(pubDateArray));
+					           	localStorage.setItem('timeElapsed', JSON.stringify(timeArray));
 					           	vm.placeName = JSON.parse( localStorage.getItem('placeName') );
 						        vm.adminCode = JSON.parse( localStorage.getItem('adminCode') );
 								vm.pubDate = JSON.parse( localStorage.getItem('pubDate') );
-								// vm.length = vm.placeName.length;
-					           	vm.displayPlace = vm.placeName[vm.currentIndex]
+								vm.elapsdTime = JSON.parse(localStorage.getItem('timeElapsed') );
+								vm.displayPlace = vm.placeName[vm.currentIndex]
+								// vm.displayPlace = "Weird Places Around the World"
 								vm.displayDate = vm.pubDate[vm.currentIndex]
 								vm.displayCode = vm.adminCode[vm.currentIndex]
+								vm.currentIndex++
 			           		}
 			         	});
 			        });
 				},
 
 				getStorage: function(){
-					let vm = this;
-					vm.currentIndex = 0
+					let vm = this
 		           	vm.placeName = JSON.parse( localStorage.getItem('placeName') );
-		           	console.log(vm.placeName)
 			        vm.adminCode = JSON.parse( localStorage.getItem('adminCode') );
 					vm.pubDate = JSON.parse( localStorage.getItem('pubDate') );
-					// vm.length = vm.placeName.length;
-		           	vm.displayPlace = vm.placeName[vm.currentIndex]
-					vm.displayDate = vm.pubDate[vm.currentIndex]
-					vm.displayCode = vm.adminCode[vm.currentIndex]
+					vm.elapsdTime = JSON.parse( localStorage.getItem('timeElapsed') );
 				},
 
 				checkLocations: function(){
-					let vm = this;
-					vm.getStorage();
+					let vm = this
+					let i = 0
+					let oldStorage = vm.placeName
 					$(document).ready(function () {
-			         	var feed = 'http://52.187.37.198/mordor/businessready/businessready.xml';
-			         	$.ajax(feed, {
-			           		accepts: {
-			             		xml: 'application/rss+xml'
-			           		},
-			           		dataType: 'xml',
-			           		success: function (data) {
-			           			var checkPlace = new Array();
-			             		$(data).find('item').each(function () {
+				     	var feed = 'http://52.187.37.198/mordor/businessready/businessready.xml';
+				     	$.ajax(feed, {
+				       		accepts: {
+				         		xml: 'application/rss+xml'
+				       		},
+				       		dataType: 'xml',
+				       		success: function (data) {
+				       			var checkPlace = new Array();
+				       			var checkDate = new Array();
+				       			var checkCode = new Array();
+				         		$(data).find('item').each(function () {
 				               		var el = $(this);
 					               	self.title = el.find('placeName').text()
 					               	checkPlace.push(el.find('placeName').text() );
-			             		});
-			             		if(checkPlace.length > vm.placeName.length){
-			             			vm.getLocations();
-			             		}
-			             	}
-			            });
+					               	checkDate.push(el.find('pubDate').text() );
+					               	checkCode.push(el.find('adminCode1').text() );
+					               	for(i ; i < checkPlace.length ; i++){
+					         			if(oldStorage[i] != checkPlace[i]){
+					         				localStorage.clear();
+					         				localStorage.setItem('placeName', JSON.stringify(checkPlace));
+					     		      		localStorage.setItem('adminCode', JSON.stringify(checkCode));
+								           	localStorage.setItem('pubDate', JSON.stringify(checkDate));
+								           	vm.placeName = JSON.parse( localStorage.getItem('placeName') );
+									        vm.adminCode = JSON.parse( localStorage.getItem('adminCode') );
+											vm.pubDate = JSON.parse( localStorage.getItem('pubDate') );
+											break;
+					         			}
+					         		}
+
+				         		});
+				         		
+				         		
+				         	}
+				        });
 					});
 				},
 
@@ -178,25 +201,33 @@
 			created: function() {
 				let vm = this;
 				// chck if local torg is present
-				if (localStorage.getItem("placeName") == null) {
-					// if no, ajax
-					vm.getLocations();
+
+				if(localStorage.getItem("placeName") != null) {
+					console.log(navigator.onLine);
+					if(navigator.onLine){
+						vm.getStorage();
+						vm.checkLocations();
+					}
 				}
 				else{
-					// if yes, call
-					setInterval(vm.checkLocations(), 60000);
-					vm.getStorage();
+					console.log("Check Storage");
+					console.log("First Time Access!");
+					vm.getLocations();
+					console.log(vm.placeName);
 				}
-				// setInterval(vm.checkLocations(), 60000);
+				vm.displayPlace = vm.placeName[vm.currentIndex]
+				// vm.displayPlace = "Weird Places Around the World"
+				vm.displayDate = vm.pubDate[vm.currentIndex]
+				vm.displayCode = vm.adminCode[vm.currentIndex]
+				vm.currentIndex++
 				vm.changeLocation();
-				// setInterval(vm.checkLocations(), 60000);	
 			},
 
 			filters: {
 				moment: function (date) {
 					aus = moment(date).utc().format('YYYY-MM-DDTHH:mm:ss');
-					test = moment().tz('Australia/Sydney').format('YYYY-MM-DDTHH:mm:ss');
-					return moment(aus).startOf('min').from(test);
+					local = moment().tz('Australia/Sydney').format('YYYY-MM-DDTHH:mm:ss');
+					return moment(aus).startOf('min').from(local);
 				},
 			},
 		})

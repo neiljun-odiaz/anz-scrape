@@ -93,6 +93,10 @@ div#app {
 	font-weight: bold;
 }
 
+.location.ver {
+	font-size: 2em;
+}
+
 .elapsed-time {
 	font-size: 2em;
 	letter-spacing: .1ch;
@@ -331,6 +335,11 @@ div#app {
 		transform: rotateZ(99deg);
 		height: 618px;
 		width: 1100px;
+	}
+	.shade.shade--one .radial {
+		top: 57px;
+		left: 180px;
+		box-shadow: 0px 0px 241px 132px rgb(99, 162, 195);
 	}
 	.logo-wrapper img {
 		margin: 0;
