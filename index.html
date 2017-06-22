@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- <script src="http://code.jquery.com/jquery-3.2.1.min.js"></script> -->
+	<script type="text/javascript" src="jquery-3.2.1.min.js"></script>
+	<!-- <script src="https://unpkg.com/vue"></script> -->
+	<script type="text/javascript" src="vue.js"></script>
+	<!-- <script src="https://unpkg.com/vue-resource"></script> -->
+	<script type="text/javascript" src="vue-resource.js"></script>
+	<!-- <script src="https://unpkg.com/vue-router"></script> -->
+	<script type="text/javascript" src="vue-router.js"></script>
+	<!-- <script src="http://momentjs.com/downloads/moment.js"></script> -->
+	<script type="text/javascript" src="moment.js"></script>
+	<!-- <script src="https://cdn.rawgit.com/nnattawat/flip/master/dist/jquery.flip.min.js"></script> -->
+	<script type="text/javascript" src="jquery.flip.min.js"></script>
+	<script type="text/javascript" src="moment-timezone.js"></script>
+
+	<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
+	<link rel="stylesheet" href="styles.css">
+	<title>Practice XML</title>
+</head>
+<body>
+   
+    
+	<div id="app">
+		<div class="app-wrapper">
+			<div class="title text-center">A New Business Just Started In</div>
+			<div class="location-wrapper text-center">
+				<span class="location text-center">{{ displayPlace }}, {{ displayCode }}</span>
+			</div>
+			<div class="elapsed-time text-center"><span class="clock-icon"></span> {{ displayDate | moment }}</div>
+			<div class="tag-line text-center">One Day Business Set-up Online</div>
+			<div class="cto-wrapper text-center">
+				<p><span class="search-icon"></span> ANZ Business Ready</p>
+			</div>
+			<div class="logo-wrapper">
+				<div class="shade shade--two"></div>
+				<div class="shade shade--one">
+					<div class="radial"></div>
+				</div>
+				<div class="shade shade--three"></div>
+				<img src="./ANZ-logo.webp" alt="">
+				<p class="portrait-text">
+					<span>Your World</span>
+					<span>Your Way</span>
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		var app = new Vue({
+
+			el: '#app',
+
+			data: {
+				displayPlace: '',
+				displayCode: '',
+				displayDate: '',
+				placeName: [],
+				adminCode: [],
+				pubDate: [],
+				currentIndex: 0,
+				windowWidth: 0,
+			},
+
+			mounted() {
+			    this.$nextTick(function() {
+				    window.addEventListener('resize', this.getWindowWidth);
+					this.getWindowWidth()
+			    })
+			},
+
+			methods: {
+				changeLocation: function() {
+					let vm = this
+					setInterval(function(){
+						if (vm.currentIndex == vm.placeName.length || vm.currentIndex == 3 ) {
+							vm.currentIndex = 0
+						}
+						vm.displayPlace = vm.placeName[vm.currentIndex]
+						vm.displayDate = vm.pubDate[vm.currentIndex]
+						vm.displayCode = vm.adminCode[vm.currentIndex]
+						vm.currentIndex++
+						
+					}, 60000);
+
+					setInterval(function(){
+						vm.rotateBox()
+					}, 60000);
+				},
+
+				getLocations: function() {
+					let vm = this;
+					$(document).ready(function () {
+			         	var feed = 'http://52.187.37.198/mordor/businessready/businessready.xml';
+			         	$.ajax(feed, {
+			           		accepts: {
+			             		xml: 'application/rss+xml'
+			           		},
+			           		dataType: 'xml',
+			           		success: function (data) {
+			           			var placeArray = new Array();
+								var pubDateArray = new Array();
+								var codeArray = new Array();
+			             		$(data).find('item').each(function () {
+				               		var el = $(this);
+					               	self.title = el.find('placeName').text()
+					               	placeArray.push(el.find('placeName').text() );
+					               	codeArray.push(el.find('adminCode1').text() );
+					               	pubDateArray.push(el.find('pubDate').text() );
+			             		});
+
+	         		      		localStorage.setItem('placeName', JSON.stringify(placeArray));
+	         		      		localStorage.setItem('adminCode', JSON.stringify(codeArray));
+					           	localStorage.setItem('pubDate', JSON.stringify(pubDateArray));
+					           	vm.placeName = JSON.parse( localStorage.getItem('placeName') );
+						        vm.adminCode = JSON.parse( localStorage.getItem('adminCode') );
+								vm.pubDate = JSON.parse( localStorage.getItem('pubDate') );
+								// vm.length = vm.placeName.length;
+					           	vm.displayPlace = vm.placeName[vm.currentIndex]
+								vm.displayDate = vm.pubDate[vm.currentIndex]
+								vm.displayCode = vm.adminCode[vm.currentIndex]
+			           		}
+			         	});
+			        });
+				},
+
+				getStorage: function(){
+					let vm = this;
+					vm.currentIndex = 0
+		           	vm.placeName = JSON.parse( localStorage.getItem('placeName') );
+		           	console.log(vm.placeName)
+			        vm.adminCode = JSON.parse( localStorage.getItem('adminCode') );
+					vm.pubDate = JSON.parse( localStorage.getItem('pubDate') );
+					// vm.length = vm.placeName.length;
+		           	vm.displayPlace = vm.placeName[vm.currentIndex]
+					vm.displayDate = vm.pubDate[vm.currentIndex]
+					vm.displayCode = vm.adminCode[vm.currentIndex]
+				},
+
+				checkLocations: function(){
+					let vm = this;
+					vm.getStorage();
+					$(document).ready(function () {
+			         	var feed = 'http://52.187.37.198/mordor/businessready/businessready.xml';
+			         	$.ajax(feed, {
+			           		accepts: {
+			             		xml: 'application/rss+xml'
+			           		},
+			           		dataType: 'xml',
+			           		success: function (data) {
+			           			var checkPlace = new Array();
+			             		$(data).find('item').each(function () {
+				               		var el = $(this);
+					               	self.title = el.find('placeName').text()
+					               	checkPlace.push(el.find('placeName').text() );
+			             		});
+			             		if(checkPlace.length > vm.placeName.length){
+			             			vm.getLocations();
+			             		}
+			             	}
+			            });
+					});
+				},
+
+				rotateBox: function(){
+					$(document).ready(function () {
+						$('.location').toggleClass('flipped');
+					});
+				},
+
+				getWindowWidth: function(event) {
+			    	this.windowWidth = document.documentElement.clientWidth;
+			    },
+			},
+
+			created: function() {
+				let vm = this;
+				// chck if local torg is present
+				if (localStorage.getItem("placeName") == null) {
+					// if no, ajax
+					vm.getLocations();
+				}
+				else{
+					// if yes, call
+					setInterval(vm.checkLocations(), 60000);
+					vm.getStorage();
+				}
+				// setInterval(vm.checkLocations(), 60000);
+				vm.changeLocation();
+				// setInterval(vm.checkLocations(), 60000);	
+			},
+
+			filters: {
+				moment: function (date) {
+					aus = moment(date).utc().format('YYYY-MM-DDTHH:mm:ss');
+					test = moment().tz('Australia/Sydney').format('YYYY-MM-DDTHH:mm:ss');
+					return moment(aus).startOf('min').from(test);
+				},
+			},
+		})
+	</script>
+</body>
+</html>

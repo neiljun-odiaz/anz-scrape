@@ -1,0 +1,303 @@
+@font-face {
+	font-family: 'Proxima Nova Reg';
+	src: url('ProximaNova-Regular.eot');
+	src: url('ProximaNova-Regular.eot?#iefix') format('embedded-opentype'),
+		url('ProximaNova-Regular.woff') format('woff'),
+		url('ProximaNova-Regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Proxima Nova Bold';
+	src: url('ProximaNova-Bold.eot');
+	src: url('ProximaNova-Bold.eot?#iefix') format('embedded-opentype'),
+		url('ProximaNova-Bold.woff') format('woff'),
+		url('ProximaNova-Bold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Proxima Nova Lt';
+	src: url('ProximaNova-Light.eot');
+	src: url('ProximaNova-Light.eot?#iefix') format('embedded-opentype'),
+		url('ProximaNova-Light.woff') format('woff'),
+		url('ProximaNova-Light.ttf') format('truetype');
+	font-weight: 300;
+	font-style: normal;
+}
+
+html, body {
+	height: 100%;
+	margin: 0;
+}
+
+body {
+	background: #0073AA; /* For browsers that do not support gradients */
+	background: -webkit-linear-gradient(left, #0a5982, #127eb8, #0a5982);
+	background: -moz-linear-gradient(left, #0a5982, #127eb8, #0a5982);
+	background: -o-linear-gradient(left, #0a5982, #127eb8, #0a5982);
+	background: linear-gradient(to right, #0a5982, #127eb8, #0a5982); 
+	font-family: "Proxima Nova Bold";
+	font-size: 20px;
+}
+
+div#app {
+    height: 100%;
+	overflow: hidden;
+    display: block;
+    position: relative;
+}
+
+.app-wrapper {
+	padding: 4em 0em;
+	height: 100%;
+	overflow: hidden;
+}
+
+.title {
+	font-size: 3.25em;
+    color: #fff;
+    margin: 2em 0 1em;
+	text-transform: uppercase;
+	/*font-weight: bold;*/
+	letter-spacing: .1ch;
+	line-height: 1.1;
+	font-family: "Proxima Nova Bold";
+}
+
+.location-wrapper {
+    display: block;
+    margin: 0px auto 3em;
+}
+
+.location {
+	font-size: 3.5em;
+	color: #1f3c4e;
+	padding: 20px;
+	background-color: #fff;
+	border-radius: 10px;
+	display: block;
+	width: 70%;
+	margin: 0 auto;
+	letter-spacing: .1ch;
+	box-shadow: 0 0 20px hsla(0,0%,100%,.5);
+	
+  	border: 1px solid gray; 
+    -webkit-transform-style: preserve-3d;  
+	transition: all 1s ease;               
+	-webkit-transition: all 1s ease;
+	text-transform: uppercase;
+
+	font-weight: bold;
+}
+
+.elapsed-time {
+	font-size: 2em;
+	letter-spacing: .1ch;
+	margin-top: 10px;
+	color: #fff;
+	text-transform: uppercase;
+	font-weight: bold;
+	font-family: "Proxima Nova Reg";
+}
+
+.elapsed-time .clock-icon {
+	display: inline-block;
+	width: 40px;
+	height: 40px;
+	background: url('./time.png') center center;
+	background-size: cover;
+	vertical-align: middle;
+	position: relative;
+    top: -3px;
+}
+
+.tag-line {
+	font-size: 2.75em;
+	letter-spacing: .1ch;
+	color: #fff;
+	margin-top: 10px;
+	text-transform: uppercase;
+	font-weight: bold;
+	font-family: "Proxima Nova Reg";
+	margin: 2em auto;
+	line-height: 1.1;
+}
+
+.cto-wrapper {
+	color: #FFF;
+	font-size: 1.8em;
+	margin: 8em auto;
+	font-family: "Proxima Nova Reg";
+	letter-spacing: .1ch;
+}
+
+.cto-wrapper .search-icon {
+	display: inline-block;
+	width: 50px;
+	height: 50px;
+	background: url('./magnifying-glass.png') center center;
+	background-size: cover;
+	vertical-align: middle;
+}
+
+.logo-wrapper {
+    position: absolute;
+    bottom: 0px;
+	left: 0;
+    width: 96%;
+    padding: 3em 2em;
+}
+
+.logo-wrapper img {
+    float: right;
+    width: 280px;
+}
+
+.logo-wrapper .shade {
+	position: absolute;
+    width: 830px;
+    height: 280px;
+    right: -90px;
+    bottom: -110px;
+    z-index: -1;
+    border-radius: 80% 117% 50% 50%;
+    transform: rotateZ(-17deg);
+}
+
+.shade.shade--one {
+    background: #003653;
+	overflow: hidden;
+}
+
+.shade.shade--two {
+	background: #0085c1;
+    right: -81px;
+    bottom: -105px;
+    width: 870px;
+}
+
+.shade.shade--three {
+	background: transparent;
+    border: 2px solid #FFF;
+    right: -142px;
+    bottom: -88px;
+    transform: rotateZ(-18deg);
+    width: 870px;
+}
+
+.shade.shade--one .radial {
+	position: absolute;
+    top: -10px;
+    right: 300px;
+    width: 1px;
+    height: 1px;
+    border-radius: 50%;
+    background: transparent;
+    box-shadow: 0px 0px 182px 82px rgb(99, 162, 195);
+}
+
+.portrait-text {
+    float: right;
+    font-size: 1.2em;
+    text-align: right;
+    right: 20px;
+	top: 40px;
+    position: relative;
+    text-transform: uppercase;
+    color: #FFF;
+    font-family: "Proxima Nova Lt";
+    margin: 0;
+	display: none;
+}
+
+.portrait-text span {
+    display: block;
+}
+
+.flipped {
+  transform: rotateX(360deg);
+  -webkit-transform: rotateX(360deg); 
+}
+
+.text-center {
+	text-align: center;
+}
+
+@media all and (min-width: 1080px) and (min-height: 1920px) {
+	body {
+		background: #0073AA; /* For browsers that do not support gradients */
+		background: -webkit-linear-gradient(top, #0a5982, #127eb8, #0a5982);
+		background: -moz-linear-gradient(top, #0a5982, #127eb8, #0a5982);
+		background: -o-linear-gradient(top, #0a5982, #127eb8, #0a5982);
+		background: linear-gradient(to bottom, #0a5982, #127eb8, #0a5982);
+	}
+	.app-wrapper {
+		padding: 6em 2em 0;
+	}
+	.title {
+		padding: 0em 2.5em;
+	}
+	.tag-line {
+		padding: 0em 3em;
+	}
+	.location-wrapper {
+		margin: 9em auto 3em;
+	}
+	.location {
+		width: 88%;
+	}
+	.logo-wrapper .shade.shade--one {
+		position: absolute;
+		width: 104%;
+		height: 280px;
+		left: -50px;
+		bottom: -40px;
+		z-index: -1;
+		border-radius: 106% 95% 50% 50%;
+		transform: rotateZ(0deg);
+	}
+	.logo-wrapper .shade.shade--two {
+		width: 104%;
+		height: 280px;
+		left: -50px;
+		bottom: -14px;
+		border-radius: 93% 95% 50% 50%;
+		transform: rotateZ(1deg);
+	}
+	.logo-wrapper .shade.shade--three {
+		width: 110%;
+		left: -40px;
+		transform: rotateZ(-5deg);
+		bottom: -87px;
+		height: 370px;
+	}
+	.logo-wrapper img {
+		position: relative;
+    	right: 20px;
+	}
+	.portrait-text {
+		display: block;
+	}
+}
+
+@media all and (min-width: 1920px) {
+	.app-wrapper {
+		padding: 4em 0em;
+    	height: 83%;
+	}
+	.location {
+		width: 67%;
+	}
+	.cto-wrapper {
+		margin: 4em auto 0;
+	}
+}
+
+@media all and (min-width: 4095px) {
+	.location {
+		width: 60%;
+	}
+}
