@@ -297,7 +297,60 @@ div#app {
 }
 
 @media all and (min-width: 4095px) {
+	.app-wrapper {
+		padding: 4em 0em 4em 18em;
+	}
+	.title {
+		margin: 1em 0 1em;
+	}
 	.location {
-		width: 60%;
+		width: 32%;
+	}
+	.tag-line {
+		display: none;
+	}
+	.logo-wrapper {
+		width: 12%;
+		height: 85%;
+	}
+	.logo-wrapper .shade {
+		transform: rotateZ(89deg);
+		bottom: auto;
+		top: 120px;
+		right: -160px;
+		left: auto;
+		height: 568px;
+		width: 1020px;
+	}
+	.shade.shade--two {
+		right: -200px;
+    	transform: rotateZ(83deg);
+	}
+	.shade.shade--three {
+		right: -197px;
+		transform: rotateZ(99deg);
+		height: 618px;
+		width: 1100px;
+	}
+	.logo-wrapper img {
+		margin: 0;
+		width: 340px;
+		float: none;
+		position: absolute;
+		top: 40%;
+		left: 90px;
+		display: block;
+	}
+	.portrait-text {
+		display: block;
+		float: none;
+		position: absolute;
+		top: 56%;
+		left: 100px;
+		right: auto;
+	}
+	.portrait-text span {
+		display: inline-block;
+		margin-right: 1px;
 	}
 }
